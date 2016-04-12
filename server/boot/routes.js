@@ -12,7 +12,12 @@ router.get('/login',function(req,res){
 	res.render('login.ejs');
 });
 router.get('/tasks',function(req,res){
-	res.render('todo.ejs');
+	app.models.tasks.find(function(err,result){
+				console.log("Tasks = ",result);
+				res.render('todo.ejs',{
+					task : result
+				});
+			});
 });
 router.post('/login',function(req,res){
 	console.log('Login req body = ',req.body);
@@ -64,16 +69,19 @@ router.post('/addTask',function(req,res){
 		if(err){
 			console.log(err);
 		}else{
-			app.models.tasks.find(function(err,result){
-				console.log("Tasks = ",result);
-				res.render('todo.ejs',{
-					task : result
-				});
-			});
-			
+			res.redirect('/tasks');			
 		}
 	});
 });
+router.get('/delete/:id', function(req, res) {
+	 app.models.tasks.findById( req.params.id, function ( err, todo ){
+	    	todo.remove( function ( err, todo ){
+	    		if(err) console.log("Do not Remove!");
+	    		else
+	      		res.redirect( '/tasks' );
+    		});
+	    });
+ });
 router.get('/logout', function(req, res) {
     var AccessToken = app.models.AccessToken;
     var token = new AccessToken({id: req.query['access_token']});

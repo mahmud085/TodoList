@@ -58,11 +58,19 @@
 				<div class="col-md-8 contnt">
 					<h2>Inbox</h2>
 					<% if (typeof task !== 'undefined') { %> 
-					<ul>
-						<% for(var i=0;i<task.length;i++) { %>
-							<li><%= task[i].description %></li>
-						<% } %>
-					</ul>
+						<table class="table table-condensed">
+							<tbody>
+								<% for(var i=0;i<task.length;i++) { %>
+							      <tr>
+							        <td><a href="/delete/<%= task[i].id %>"><span class="glyphicon glyphicon-remove"></span>
+							        </a></td>
+							        <td><%= task[i].description %></td>
+							        <td><%= task[i].date %></td>
+							        <td><%= task[i].time %></td>
+							      </tr>
+							    <% } %>
+							</tbody>
+						</table>
 					<% } %>
 					<div class="collapse" id="collapseExample">
 					    <form role='form' class='form-inline' method='post' action='/addTask'>
