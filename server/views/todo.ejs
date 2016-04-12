@@ -2,6 +2,12 @@
 <html>
 	<head>
 		<% include head %>
+		<script type="text/javascript">
+	     	$(function() {
+			    $( "#datepicker" ).datepicker();
+			    $( "#timepicker" ).timepicker();
+			});
+        </script>
 		<style>
 			.contnt {
 
@@ -51,20 +57,29 @@
 				</div>
 				<div class="col-md-8 contnt">
 					<h2>Inbox</h2>
+					<% if (typeof task !== 'undefined') { %> 
+					<ul>
+						<% for(var i=0;i<task.length;i++) { %>
+							<li><%= task[i].description %></li>
+						<% } %>
+					</ul>
+					<% } %>
 					<div class="collapse" id="collapseExample">
-					    <form role='form' class='form-inline' method='post'>
+					    <form role='form' class='form-inline' method='post' action='/addTask'>
 					    <div class='form-group'>
 							<input type='text' class="form-control" name="description" placeholder="Description">
 						</div>
 						<div class='form-group'>
-							<input type='text' class="form-control" name="date" placeholder="Date">
+							<input type='text' class="form-control" id='datepicker' name="date" placeholder="Date">
+						</div>
+						<div class='form-group'>
+							<input type='text' class="form-control" id='timepicker' name="time" placeholder="Time">
 						</div>
 						<button type='submit' class="btn btn-danger btn-md">Save</button>
 						<a data-toggle="collapse" href="#collapseExample" class="btn btn-warning btn-md">Cancel</a>
 					    </form>
 
 					</div>
-					<!--<span class="glyphicon glyphicon-plus logo addTask"><a data-toggle="collapse" href="#collapseExample">Add Task</a></span>-->
 					<div class="addTask">
 					<a data-toggle="collapse" href="#collapseExample"><span class="glyphicon glyphicon-plus logo"></span> Add Tasks</a>
 					</div>

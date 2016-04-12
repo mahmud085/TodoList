@@ -11,6 +11,9 @@ router.get('/signup',function(req,res){
 router.get('/login',function(req,res){
 	res.render('login.ejs');
 });
+router.get('/tasks',function(req,res){
+	res.render('todo.ejs');
+});
 router.post('/login',function(req,res){
 	console.log('Login req body = ',req.body);
 	var User = app.models.User;
@@ -27,9 +30,12 @@ router.post('/login',function(req,res){
 			token = token.toJSON();
 			console.log('Token = ',token.id);
 			console.log('username = ',token.user.username);
-			res.render('todo.ejs',{
-				username: token.user.username,
-        		accessToken: token.id
+			app.models.tasks.find(function(err,result){
+				res.render('todo.ejs',{
+					username: token.user.username,
+	        		accessToken: token.id,
+	        		task : result
+				});
 			});
 		}
 	});
@@ -48,8 +54,25 @@ router.post('/signup',function(req,res){
 		}
 	});
 });
-app.get('/authenticate',function(req,res,next){
-  res.render('todo.ejs');
+router.post('/addTask',function(req,res){
+	var task = app.models.tasks;
+	var newTask = {};
+	newTask.description = req.body.description;
+	newTask.time = req.body.time;
+	newTask.date = req.body.date;
+	task.create(newTask,function(err,tasks){
+		if(err){
+			console.log(err);
+		}else{
+			app.models.tasks.find(function(err,result){
+				console.log("Tasks = ",result);
+				res.render('todo.ejs',{
+					task : result
+				});
+			});
+			
+		}
+	});
 });
 router.get('/logout', function(req, res) {
     var AccessToken = app.models.AccessToken;

@@ -37,7 +37,11 @@
     "public": false
   },
   "user": {
-    "dataSource": "db",
+    "dataSource": "dbase",
+    "public": true
+  },
+  "tasks": {
+    "dataSource": "dbase",
     "public": true
   }
 }

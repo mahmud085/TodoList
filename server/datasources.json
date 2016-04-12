@@ -8,5 +8,14 @@
     "localStorage": "",
     "file": "",
     "connector": "memory"
+  },
+  "dbase": {
+    "host": "",
+    "port": 0,
+    "database": "dbase",
+    "password": "",
+    "name": "dbase",
+    "user": "",
+    "connector": "mongodb"
   }
 }
