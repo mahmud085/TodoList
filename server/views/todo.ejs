@@ -50,7 +50,7 @@
 			<div class='row'>
 				<div class="col-md-4">
 					<ul class='sidemenu'>
-						<li><a class='active' href="#">
+						<li><a class='active' href="/tasks<% if (typeof accessToken !== 'undefined') {%>?access_token=<%= accessToken %><% } %>">
 						<span class="glyphicon glyphicon-envelope logo"></span>  Inbox</a></li>
 						<li><a href="#"><span class="glyphicon glyphicon-tasks logo"></span>  Today</a></li>
 					</ul>
@@ -62,7 +62,8 @@
 							<tbody>
 								<% for(var i=0;i<task.length;i++) { %>
 							      <tr>
-							        <td><a href="/delete/<%= task[i].id %>"><span class="glyphicon glyphicon-remove"></span>
+							        <td><a href="/delete/<%= task[i].id %>/<% if (typeof accessToken !==
+            'undefined') { %>?access_token=<%= accessToken %><% }%>"><span class="glyphicon glyphicon-remove"></span>
 							        </a></td>
 							        <td><%= task[i].description %></td>
 							        <td><%= task[i].date %></td>
@@ -73,7 +74,8 @@
 						</table>
 					<% } %>
 					<div class="collapse" id="collapseExample">
-					    <form role='form' class='form-inline' method='post' action='/addTask'>
+					    <form role='form' class='form-inline' method='post' action="/addTask<% if (typeof accessToken !== 'undefined') {
+            %>?access_token=<%= accessToken %><% } %>">
 					    <div class='form-group'>
 							<input type='text' class="form-control" name="description" placeholder="Description">
 						</div>

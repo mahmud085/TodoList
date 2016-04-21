@@ -1,3 +1,5 @@
+var loopback = require('loopback');
+
 module.exports=function(app) {
 
 var router=app.loopback.Router();
@@ -12,9 +14,17 @@ router.get('/login',function(req,res){
 	res.render('login.ejs');
 });
 router.get('/tasks',function(req,res){
+
+	var ctx = loopback.getCurrentContext();
+    var currentUser = ctx && ctx.get('currentUser');
+ 	accesstoken = encodeURIComponent(req.query.access_token);
+ 	console.log(accesstoken);
+
 	app.models.tasks.find(function(err,result){
 				console.log("Tasks = ",result);
 				res.render('todo.ejs',{
+					username: currentUser.username,
+	        		accessToken: accesstoken,
 					task : result
 				});
 			});
@@ -35,6 +45,8 @@ router.post('/login',function(req,res){
 			token = token.toJSON();
 			console.log('Token = ',token.id);
 			console.log('username = ',token.user.username);
+			res.locals.username = token.user.username;
+			res.locals.accessToken = token.id
 			app.models.tasks.find(function(err,result){
 				res.render('todo.ejs',{
 					username: token.user.username,
@@ -60,6 +72,9 @@ router.post('/signup',function(req,res){
 	});
 });
 router.post('/addTask',function(req,res){
+
+ 	accesstoken = encodeURIComponent(req.query.access_token);
+ 
 	var task = app.models.tasks;
 	var newTask = {};
 	newTask.description = req.body.description;
@@ -69,16 +84,19 @@ router.post('/addTask',function(req,res){
 		if(err){
 			console.log(err);
 		}else{
-			res.redirect('/tasks');			
+			res.redirect('/tasks?access_token='+accesstoken);			
 		}
 	});
 });
 router.get('/delete/:id', function(req, res) {
+	console.log(" delete task access_token = ",req.query.access_token);
+ 	accesstoken = encodeURIComponent(req.query.access_token);
+ 	console.log(accesstoken);
 	 app.models.tasks.findById( req.params.id, function ( err, todo ){
 	    	todo.remove( function ( err, todo ){
 	    		if(err) console.log("Do not Remove!");
 	    		else
-	      		res.redirect( '/tasks' );
+	      		res.redirect( '/tasks?access_token='+accesstoken);
     		});
 	    });
  });
